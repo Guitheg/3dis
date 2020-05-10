@@ -1,6 +1,6 @@
 import sys
 import tkinter as tk
-from gui.entry_panel import EntryPanel, ButtonPanel
+from gui.entry_panel import EntryPanel, ButtonPanel, TwoEntryPanel, ThreeEntryPanel
 from gui.scrollerFrame import ScrollerFrame
 
 class HomeView(tk.Frame):
@@ -14,8 +14,6 @@ class HomeView(tk.Frame):
         self.pack()
         self.config = config
 
-        
-
         self.box1 = tk.LabelFrame(self)
         self.box1.pack(side=tk.TOP, expand=tk.YES, fill=tk.BOTH, padx=5, pady=5)
         
@@ -28,18 +26,25 @@ class HomeView(tk.Frame):
         self.annuler = tk.Button(self.box1, text="Annuler derniere opération")
         self.annuler.pack(side=tk.TOP)
 
-        self.afficher_valeur = tk.Button(self.box1, text="Afficher Valeurs", state = tk.DISABLED)
-        self.afficher_valeur.pack(side=tk.TOP)
-
-        self.histogramme = ButtonPanel(self.box1, "Histogramme", "Calculer l'Histogramme")
+        self.info = tk.LabelFrame(self.box1, text="Informations")
+        self.info.pack(side=tk.TOP, expand=tk.YES, fill=tk.BOTH, padx=5, pady=5)
+        self.afficher_valeur = tk.Button(self.info, text="Afficher Valeurs", state = tk.DISABLED)
+        self.afficher_valeur.pack(side=tk.TOP, fill=tk.BOTH, expand=tk.TRUE, pady=5, padx=5)
+        self.histogramme = tk.Button(self.info, text="Afficher Histogramme", state=tk.DISABLED)
+        self.histogramme.pack(side=tk.TOP, fill=tk.BOTH, expand=tk.TRUE, pady=5, padx=5)
+        self.spectre = tk.Button(self.info, text="Afficher Spectre", state=tk.DISABLED)
+        self.spectre.pack(side=tk.BOTTOM, fill=tk.BOTH, expand=tk.TRUE, pady=5, padx=5)
 
         self.box2 = tk.LabelFrame(self)
-        self.box2.pack(side=tk.BOTTOM, expand=tk.YES, fill=tk.BOTH, padx=5, pady=5)
-
-        
+        self.box2.pack(side=tk.BOTTOM, expand=tk.YES, fill=tk.BOTH, padx=5, pady=5)  
 
         self.scrolledFrame = ScrollerFrame(self.box2)
         self.scrolledFrame.pack(side=tk.TOP, expand=tk.YES, fill=tk.BOTH, padx=5, pady=5)
+
+        self.bruit_gauss = TwoEntryPanel(self.scrolledFrame.interior, "Bruit Gaussien", "Appliquer", from_=1, to=250, resolution=1)
+        self.bruit_uniforme = TwoEntryPanel(self.scrolledFrame.interior, "Bruit Uniforme", "Appliquer", from_=1, to=250, resolution=1)
+        self.bruit_periodique = ThreeEntryPanel(self.scrolledFrame.interior, "Bruit Periodique", "Appliquer", from_=0, to=2, resolution=0.01)
+        self.bruit_sp = EntryPanel(self.scrolledFrame.interior, "Bruit Sel et Poivre", "Appliquer", from_=0, to=1, resolution=0.01)
 
         self.brillance = EntryPanel(self.scrolledFrame.interior, "Brillance", "Changer la brillance", from_=-200, to=200, resolution=0.1)
         self.contraste = EntryPanel(self.scrolledFrame.interior, "Constraste", "Changer le contraste", from_=0, to=10, resolution=0.01)
@@ -55,9 +60,18 @@ class HomeView(tk.Frame):
         self.lut_sigmoid = ButtonPanel(self.scrolledFrame.interior, "Sigmoid", "Appliquer la Lut")
         
         self.egaliser = ButtonPanel(self.scrolledFrame.interior, "Egalisation Histogramme", "Appliquer l'Egalisation")
+        self.sobel = EntryPanel(self.scrolledFrame.interior, "Opérateur de Sobel", "Appliquer SOBEL", from_=1, to=30, resolution=0.01)
+        self.moyenneur = EntryPanel(self.scrolledFrame.interior, "Filtre Moyenneur", "Appliquer Moyenneur", from_=1, to=15, resolution=1)
+        self.laplacien = ButtonPanel(self.scrolledFrame.interior, "Filtre Laplacien", "Appliquer Laplacien")
+        self.pb_ideal = EntryPanel(self.scrolledFrame.interior, "FFT Passe Bas Ideal", "Appliquer PB Ideal", from_=1, to=250, resolution=1)
+        self.ph_ideal = EntryPanel(self.scrolledFrame.interior, "FFT Passe Haut Ideal", "Appliquer PH Ideal", from_=1, to=250, resolution=1)
+        self.pb_gauss = EntryPanel(self.scrolledFrame.interior, "FFT Passe Bas Gauss", "Appliquer PB Gauss", from_=1, to=250, resolution=1)
+        self.ph_gauss = EntryPanel(self.scrolledFrame.interior, "FFT Passe Haut Gauss", "Appliquer PH Gauss", from_=1, to=250, resolution=1)
+        self.laplacien_fft = ButtonPanel(self.scrolledFrame.interior, "Laplacien FFT", "Appliquer PB Ideal")
 
-
-        self.buttons = [self.brillance, self.contraste, self.gamma, self.lut_sigmoid, self.histogramme, self.negatif, self.seuillage,
-                        self.logarithmique, self.puissance, self.egaliser]
+        self.buttons = [self.brillance, self.contraste, self.gamma, self.lut_sigmoid, self.negatif, self.seuillage,
+                        self.logarithmique, self.puissance, self.egaliser, self.sobel, self.moyenneur, self.laplacien, self.pb_ideal,
+                        self.ph_ideal, self.pb_gauss, self.ph_gauss, self.laplacien_fft, self.bruit_gauss, self.bruit_uniforme, self.bruit_periodique,
+                        self.bruit_sp]
 
 

@@ -4,8 +4,13 @@ from model.pt_to_pt import pt_to_pt, opt
 from utils import factoriel, normalize, addition
 
 def bruit_s_p(image, prob, m = 255):
-    R = pt_to_pt(image, poivre, prob, signature='(c),()->(c)')
-    return pt_to_pt(R, sel, prob, signature='(c),()->(c)')
+    I = np.array(image)
+    if I.ndim == 3:
+        R = pt_to_pt(image, poivre, prob, signature='(c),()->(c)')
+        return pt_to_pt(R, sel, prob, signature='(c),()->(c)')
+    else :
+        R = pt_to_pt(image, poivre, prob)
+        return pt_to_pt(R, sel, prob)
 
 def poivre(p, P):
     return p if P <= random.randint(0, 100) else (0 if type(p) == int else [0,0,0])
@@ -17,31 +22,40 @@ def bruit_gauss(image, u = 0, s = 10, m = 255):
     img = np.array(image, dtype=np.uint8)
     gauss = np.random.normal(u, s, (len(img),len(img[0])))
     if img.ndim == 3:
-        return np.stack([addition(img[:,:,0], gauss, 0, m), 
-                        addition(img[:,:,1], gauss, 0, m), 
-                        addition(img[:,:,2], gauss, 0, m)], axis=2)
-    return addition(img, gauss, 0, m)
+        return np.stack([addition(img[:,:,0], gauss, 0, m).astype(np.uint8), 
+                        addition(img[:,:,1], gauss, 0, m).astype(np.uint8), 
+                        addition(img[:,:,2], gauss, 0, m).astype(np.uint8)], axis=2)
+    return addition(img, gauss, 0, m).astype(np.uint8)
 
 def bruit_uniform(image, a, b, m=255):
     img = np.array(image, dtype=np.uint8)
     uniform = np.random.uniform(a, b, size=(len(img),len(img[0])))
     if img.ndim == 3:
-        return np.stack([addition(img[:,:,0], uniform, 0, m), 
-                        addition(img[:,:,1], uniform, 0, m), 
-                        addition(img[:,:,2], uniform, 0, m)], axis=2)
-    return addition(img, uniform, 0, m)
+        return np.stack([addition(img[:,:,0], uniform, 0, m).astype(np.uint8), 
+                        addition(img[:,:,1], uniform, 0, m).astype(np.uint8), 
+                        addition(img[:,:,2], uniform, 0, m).astype(np.uint8)], axis=2)
+    return addition(img, uniform, 0, m).astype(np.uint8)
 
 def bruit_periodique(image, u0=0.1, v0=0.1, A = 2, m = 255):
     img = np.array(image, dtype=np.uint8)
     for u in range(len(img)):
         for v in range(len(img[0])):
             B = np.cos(2*np.pi*(u0*u+v0*v)) * A
-            if (B + img[u,v] < 0):
-                img[u,v] = 0
-            elif (B + img[u,v] > m):
-                img[u,v] = m
+            if img.ndim == 3:
+                for b in range(len(img[u,v])):
+                    if (B + img[u,v,b] < 0):
+                        img[u,v,b] = 0
+                    elif (B + img[u,v,b]  > m):
+                        img[u,v,b]  = m
+                    else:
+                        img[u,v,b]  += B
             else:
-                img[u,v] += B
+                if (B + img[u,v] < 0):
+                    img[u,v] = 0
+                elif (B + img[u,v] > m):
+                    img[u,v] = m
+                else:
+                    img[u,v] += B
     return img.astype(np.uint8)
 
 # def uniforme(p, a, b):

@@ -1,10 +1,9 @@
 import os
 import sys
-from model.filtrage import N4, N8, filtre, masque_moyenneur, LAPLACIEN, laplacien, filtre_median, op_sobel
+# from model.filtrage import N4, N8, filtre, masque_moyenneur, LAPLACIEN, laplacien, filtre_median, op_sobel
 from model.pt_to_pt import opt 
 from model.histogramme import histogramme_luminance, histogramme_valeur, egalisation, ddp, ddp_cumule
-from model.bruit import bruit_s_p, bruit_gauss, bruit, exponentiel, poivre, sel, rayleigh, uniforme, bruit_periodique, bruit_uniform
-from model.op_freq import filtre_freq, to_freq, to_time, passe_bas_ideal, passe_bas_butterworth, passe_bas_gaussien, filtre_laplacien, filtre_pum
+from model.bruit import bruit_uniform
 
 from utils import afficher_image, plot_fig, normalize
 
@@ -83,19 +82,19 @@ def main():
     # plt.show()
 
 
-    i_sp = bruit(bruit(I, poivre, 0.05), sel, 0.05)
-    i_gauss = bruit_gauss(image, u=0, s=50)
+    # i_sp = bruit(bruit(I, poivre, 0.05), sel, 0.05)
+    # i_gauss = bruit_gauss(image, u=0, s=50)
     i_uniforme = bruit_uniform(image, 2, 80)
-    i_rayleigh = normalize(bruit(I, rayleigh, a=1, b=10000))
-    i_exp = normalize(bruit(I, exponentiel, a=0.01))
-    i_periodique = bruit_periodique(image, 0.2, 0.2, A=30)
+    # i_rayleigh = normalize(bruit(I, rayleigh, a=1, b=10000))
+    # i_exp = normalize(bruit(I, exponentiel, a=0.01))
+    # i_periodique = bruit_periodique(image, 0.2, 0.2, A=30)
 
-    afficher_image(image, "Bruit", 2, 3, 1, "Original")
-    afficher_image(i_periodique, "Bruit", 2, 3, 2, "Periodique")
-    afficher_image(i_gauss, "Bruit", 2, 3, 3, "Gauss")
+    # afficher_image(image, "Bruit", 2, 3, 1, "Original")
+    # afficher_image(i_periodique, "Bruit", 2, 3, 2, "Periodique")
+    # afficher_image(i_gauss, "Bruit", 2, 3, 3, "Gauss")
     afficher_image(i_uniforme, "Bruit", 2, 3, 4, "Uniforme")
-    afficher_image(i_sp, "Bruit", 2, 3, 5, "Rayleigh")
-    afficher_image(i_exp, "Bruit", 2, 3, 6, "Erland")
+    # afficher_image(i_sp, "Bruit", 2, 3, 5, "Rayleigh")
+    # afficher_image(i_exp, "Bruit", 2, 3, 6, "Erland")
 
     # afficher_image(i_exp, "Bruit2", 2, 3, 1, "Original")
     # afficher_image(image, "Bruit2", 2, 3, 2, "Exponentiel")
