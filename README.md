@@ -1,6 +1,6 @@
-# viso
+# 3D Images et Sons
  Implementation d'algorithmes appris en Master
 
 ```
-python viso.py
+python main.py
 ```
